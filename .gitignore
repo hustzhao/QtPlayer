@@ -11,3 +11,7 @@ build-QtPlayer-Desktop_Qt_5_11_0_MinGW_32bit-Debug/debug/moc_dialog.cpp
 build-QtPlayer-Desktop_Qt_5_11_0_MinGW_32bit-Debug/debug/moc_dialog.o
 build-QtPlayer-Desktop_Qt_5_11_0_MinGW_32bit-Debug/debug/moc_predefs.h
 build-QtPlayer-Desktop_Qt_5_11_0_MinGW_32bit-Debug/ui_dialog.h
+build-QtPlayer-Desktop_Qt_5_11_0_MinGW_32bit-Debug/debug/moc_playerrenderer.cpp
+build-QtPlayer-Desktop_Qt_5_11_0_MinGW_32bit-Debug/debug/moc_playerrenderer.o
+build-QtPlayer-Desktop_Qt_5_11_0_MinGW_32bit-Debug/debug/playerrenderer.o
+build-QtPlayer-Desktop_Qt_5_11_0_MinGW_32bit-Debug/ui_playerrenderer.h
