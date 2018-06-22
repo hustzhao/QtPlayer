@@ -23,3 +23,8 @@ Tiger在11年的时候就介绍了FFmpeg，自己也比较感兴趣，但是到�
 Windows使用的Windows7(10)，QT使用的5.11.0,FFmpeg使用的是(未知，因为直接搬运别人的代码，后期升级到最新版本),SDL是SDL2
 
 教程中一些基本的流程操作就不做描述了，只记录关键步骤。
+
+
+第一步，创建基本的播放界面
+
+[PlayerBase](doc/PlayerBase.md)
