@@ -28,6 +28,10 @@ SOURCES += \
         dialog.cpp \
     playerrenderer.cpp
 
+INCLUDEPATH +=  ./include
+
+LIBS += -L./lib/ -lavcodec -lavdevice -lavfilter -lavformat -lavutil -lswscale -lswresample
+
 HEADERS += \
         dialog.h \
     playerrenderer.h
