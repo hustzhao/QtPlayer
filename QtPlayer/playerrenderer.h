@@ -15,8 +15,12 @@ public:
     explicit PlayerRenderer(QWidget *parent = 0);
     ~PlayerRenderer();
 
+public slots:
+    void slotGetOneFrame(QImage);
+
 private:
     Ui::PlayerRenderer *ui;
+    QImage image_;
 
 protected:
     void paintEvent(QPaintEvent *event);

@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "playerrenderer.h"
+#include "videoplayer.h"
 
 namespace Ui {
 class Dialog;
@@ -19,6 +20,8 @@ public:
 private:
     Ui::Dialog *ui;
     PlayerRenderer* player_renderer_{NULL};
+    VideoPlayer* videoplayer_{NULL};
+    QString filename_{};
 private slots:
     void slotButtonClick();
 };

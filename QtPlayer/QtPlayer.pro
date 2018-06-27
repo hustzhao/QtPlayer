@@ -26,15 +26,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         dialog.cpp \
-    playerrenderer.cpp
+    playerrenderer.cpp \
+    videoplayer.cpp
 
-INCLUDEPATH +=  ./include
+INCLUDEPATH +=  ../include
 
-LIBS += -L./lib/ -lavcodec -lavdevice -lavfilter -lavformat -lavutil -lswscale -lswresample
+LIBS += -L../lib -lavformat -lavcodec -lswscale -lavutil -lswresample -lz -lm -lpthread
 
 HEADERS += \
         dialog.h \
-    playerrenderer.h
+    playerrenderer.h \
+    videoplayer.h
 
 FORMS += \
         dialog.ui \

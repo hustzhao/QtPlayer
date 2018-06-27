@@ -1,6 +1,7 @@
 #include "dialog.h"
 #include "ui_dialog.h"
 #include <QDebug>
+#include <QFileDialog>
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
@@ -14,6 +15,10 @@ Dialog::Dialog(QWidget *parent) :
 
     connect(ui->pushButtonOpen,SIGNAL(clicked()),this,SLOT(slotButtonClick()));
     connect(ui->pushButtonPlay,SIGNAL(clicked()),this,SLOT(slotButtonClick()));
+
+    videoplayer_ = new VideoPlayer();
+    videoplayer_->Init();
+    connect(videoplayer_,SIGNAL(signalGetOneFrame(QImage)),player_renderer_,SLOT(slotGetOneFrame(QImage)));
 }
 
 Dialog::~Dialog()
@@ -25,7 +30,17 @@ Dialog::~Dialog()
 void Dialog::slotButtonClick() {
     if (QObject::sender() == ui->pushButtonOpen)
     {
-        qDebug()<<"pushButtonOpen";
+      qDebug()<<"pushButtonOpen";
+      filename_ = QFileDialog::getOpenFileName(
+                 this, "选择要播放的文件",
+                  "/");
+
+      if (filename_.isEmpty())
+      {
+        return;
+      }
+      qDebug()<<filename_;
+      videoplayer_->setFileName(filename_);
     }
     else if (QObject::sender() == ui->pushButtonPlay)
     {
@@ -33,6 +48,6 @@ void Dialog::slotButtonClick() {
 
         player_renderer_->show();
 
-        player_renderer_->update();
+        videoplayer_->start();
     }
 }
