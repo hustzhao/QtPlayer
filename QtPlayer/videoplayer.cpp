@@ -4,17 +4,8 @@
 
 #define SDL_MAIN_HANDLED
 
-
-
 VideoPlayer::VideoPlayer()
 {
-}
-
-void VideoPlayer::Init() {
-  qDebug()<<"Init.";
-  av_register_all();
-
-  return;
 }
 
 void VideoPlayer::setFileName(QString filename) {
@@ -23,7 +14,7 @@ void VideoPlayer::setFileName(QString filename) {
 
 void VideoPlayer::run() {
 
-  char file_path[1024 + 1] = {0};;
+  char file_path[1024 + 1] = {0};
   strcpy(file_path,filename_.toUtf8().data());
 
   AVFormatContext *pFormatContext = avformat_alloc_context();
@@ -40,36 +31,34 @@ void VideoPlayer::run() {
   }
 
   AVCodec *pCodec = NULL;
-  AVCodecParameters *pCodecParameters =  NULL;
+  AVCodecParameters* pCodecParameters =  NULL;
   int video_stream_index = -1;
-  struct SwsContext *img_convert_ctx = NULL;
-  AVFrame* pFrameRGB = NULL;
-  uint8_t *out_buffer = NULL;
+  struct SwsContext* img_convert_ctx = NULL;
+
+  uint8_t* out_buffer = NULL;
   int numBytes = 0;
 
   for (unsigned int i = 0; i < pFormatContext->nb_streams; i++) {
-    AVCodecParameters *pLocalCodecParameters =  NULL;
-    pLocalCodecParameters = pFormatContext->streams[i]->codecpar;
-    AVCodec *pLocalCodec = NULL;
 
-    pLocalCodec = avcodec_find_decoder(pLocalCodecParameters->codec_id);
+    AVCodecParameters* pLocalCodecParameters = pFormatContext->streams[i]->codecpar;
+    AVCodec* pLocalCodec = avcodec_find_decoder(pLocalCodecParameters->codec_id);
 
-    if (pLocalCodec==NULL) {
+    if (NULL == pLocalCodec) {
       return;
     }
 
-    if (pLocalCodecParameters->codec_type == AVMEDIA_TYPE_VIDEO) {
+    if (AVMEDIA_TYPE_VIDEO == pLocalCodecParameters->codec_type) {
       video_stream_index = i;
       pCodec = pLocalCodec;
       pCodecParameters = pLocalCodecParameters;
 
-    } else if (pLocalCodecParameters->codec_type == AVMEDIA_TYPE_AUDIO) {
+    } else if (AVMEDIA_TYPE_AUDIO == pLocalCodecParameters->codec_type) {
       ;
     }
 
   }
 
-  AVCodecContext *pCodecContext = avcodec_alloc_context3(pCodec);
+  AVCodecContext* pCodecContext = avcodec_alloc_context3(pCodec);
   if (!pCodecContext)
   {
     return;
@@ -85,28 +74,29 @@ void VideoPlayer::run() {
     return;
   }
 
-  AVFrame *pFrame = av_frame_alloc();
+  AVFrame* pFrame = av_frame_alloc();
   if (!pFrame)
   {
     return;
   }
 
-  pFrameRGB = av_frame_alloc();
+  AVFrame* pFrameRGB = av_frame_alloc();
+  if (!pFrameRGB)
+  {
+    return;
+  }
 
   img_convert_ctx = sws_getContext(pCodecContext->width, pCodecContext->height,
           pCodecContext->pix_fmt, pCodecContext->width, pCodecContext->height,
           AV_PIX_FMT_RGB32, SWS_BICUBIC, NULL, NULL, NULL);
 
-  numBytes = avpicture_get_size(AV_PIX_FMT_RGB32,
-                                pCodecContext->width,pCodecContext->height);
-
+  numBytes = av_image_get_buffer_size(AV_PIX_FMT_RGB32, pCodecContext->width, pCodecContext->height, 1);
 
   out_buffer = (uint8_t *) av_malloc(numBytes * sizeof(uint8_t));
 
-  avpicture_fill((AVPicture *) pFrameRGB, out_buffer, AV_PIX_FMT_RGB32,
-          pCodecContext->width, pCodecContext->height);
+  av_image_fill_arrays(pFrameRGB->data, pFrameRGB->linesize, out_buffer, AV_PIX_FMT_RGB32, pCodecContext->width, pCodecContext->height, 1);
 
-  AVPacket *pPacket = av_packet_alloc();
+  AVPacket* pPacket = av_packet_alloc();
   if (!pPacket)
   {
     return;
@@ -121,6 +111,7 @@ void VideoPlayer::run() {
       if (response < 0)
         break;
     }
+
     av_packet_unref(pPacket);
   }
 
@@ -129,8 +120,6 @@ void VideoPlayer::run() {
   av_packet_free(&pPacket);
   av_frame_free(&pFrame);
   avcodec_free_context(&pCodecContext);
-
-
 }
 
 void VideoPlayer::displayVideo(QImage image) {
@@ -170,32 +159,4 @@ int VideoPlayer::decode_packet(AVPacket *pPacket, AVCodecContext *pCodecContext,
   }
 
   return 0;
-}
-
-void VideoPlayer::SaveFrame(AVFrame *pFrame, int width, int height,int index)
-{
-
-  FILE *pFile;
-  char szFilename[32];
-  int  y;
-
-  // Open file
-  sprintf(szFilename, "frame%d.ppm", index);
-  pFile=fopen(szFilename, "wb");
-
-  if(pFile==NULL)
-    return;
-
-  // Write header
-  fprintf(pFile, "P6 %d %d 255 ", width, height);
-
-  // Write pixel data
-  for(y=0; y<height; y++)
-  {
-    fwrite(pFrame->data[0]+y*pFrame->linesize[0], 1, width*3, pFile);
-  }
-
-  // Close file
-  fclose(pFile);
-
 }

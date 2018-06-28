@@ -17,7 +17,6 @@ Dialog::Dialog(QWidget *parent) :
     connect(ui->pushButtonPlay,SIGNAL(clicked()),this,SLOT(slotButtonClick()));
 
     videoplayer_ = new VideoPlayer();
-    videoplayer_->Init();
     connect(videoplayer_,SIGNAL(signalGetOneFrame(QImage)),player_renderer_,SLOT(slotGetOneFrame(QImage)));
 }
 
@@ -33,7 +32,7 @@ void Dialog::slotButtonClick() {
       qDebug()<<"pushButtonOpen";
       filename_ = QFileDialog::getOpenFileName(
                  this, "选择要播放的文件",
-                  "/");
+                  "~");
 
       if (filename_.isEmpty())
       {

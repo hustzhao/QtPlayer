@@ -20,7 +20,6 @@ class VideoPlayer : public QThread
    Q_OBJECT
 public:
   VideoPlayer();
-  void Init();
   void setFileName(QString filename);
 protected:
   void run() override;
@@ -28,7 +27,6 @@ protected:
 private:
   void displayVideo(QImage image);
   int decode_packet(AVPacket *pPacket, AVCodecContext *pCodecContext, AVFrame *pFrame, AVFrame *pFrameRGB, uint8_t *out_buffer, struct SwsContext *img_convert_ctx);
-  void SaveFrame(AVFrame *pFrame, int width, int height,int index);
   QString filename_{};
 
 signals:
