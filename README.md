@@ -30,3 +30,7 @@ Windows使用的Windows7(10)，QT使用的5.11.0,FFmpeg使用的是(未知，因
 [PlayerBase](doc/PlayerBase.md)
 
 2018/6/25 今天Windows 10崩溃了，现在还在重置，所以还是切换到ubuntu进行开发吧，windows伤不起
+
+/usr/bin/x86_64-linux-gnu-ld: cannot find -lGL
+sudo apt-get install libgl1-mesa-dev 
+https://cn.aliyun.com/jiaocheng/128675.html
